@@ -1,0 +1,21 @@
+---
+version: "3"
+
+volumes:
+  postgres_data:
+
+services:
+  app:
+    build: .
+    environment:
+      - APP_HOST
+      - APP_PORT
+    expose:
+      - ${APP_PORT}
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    volumes:
+      - ./src:/opt/motius-project/src
+      - ./tests:/opt/motius-project/tests
+    env_file:
+      - .env

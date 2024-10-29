@@ -1,0 +1,42 @@
+name: style and tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  flake8-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v3
+
+      - name: flake8 Lint
+        uses: py-actions/flake8@v2
+        with:
+          max-line-length: "120"
+
+  isort:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v3
+
+      - name: Run isort
+        uses: isort/isort-action@v1
+        with:
+          configuration: "--profile black"
+
+  mypy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v3
+      - name: Run mypy
+        uses: jpetrucciani/mypy-check@master
+        with:
+          mypy_flags: '--ignore-missing-imports'

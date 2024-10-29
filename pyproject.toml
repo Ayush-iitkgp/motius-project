@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "motius-project"
+version = "0.1.0"
+description = ""
+authors = ["ayush-iitkgp <ayushpandey.iitkgp@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.10.8"
+fastapi = "^0.115.4"
+unicorn = "^2.1.1"
+starlette = "^0.41.2"
+uvicorn = "^0.32.0"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.10.0"
+flake8 = "^7.1.1"
+isort = "^5.13.2"
+mypy = "^1.13.0"
+pre-commit = "^4.0.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
