@@ -38,9 +38,12 @@ async def websocket_endpoint(websocket: WebSocket, username: str = Query(...)) -
                 recipient = data.get("to")
                 message = data.get("msg")
                 if recipient in connected_users:
-                    await connected_users[recipient].send_json(
-                        {"action": "direct_message", "from": username, "msg": message}
-                    )
+                    try:
+                        await connected_users[recipient].send_json(
+                            {"action": "direct_message", "from": username, "msg": message}
+                        )
+                    except Exception as e:
+                        logger.error(f"Error sending direct message: {e}", exc_info=True)
 
             elif action == "group_message":
                 group_name = data.get("to")
@@ -49,11 +52,15 @@ async def websocket_endpoint(websocket: WebSocket, username: str = Query(...)) -
                 logger.info(f"group subscrbiber are{group_subscribers}")
                 if group_name in group_subscribers:
                     for subscriber in group_subscribers[group_name]:
-                        logger.info(f"Subscriber: {subscriber}")
-                        await subscriber.send_json(
-                            {"action": "group_message", "to": group_name, "from": username, "msg": message}
-                        )
-                        logger.info("message sent to group")
+                        try:
+                            logger.info(f"Subscriber: {subscriber}")
+                            await subscriber.send_json(
+                                {"action": "group_message", "to": group_name, "from": username, "msg": message}
+                            )
+                        except Exception as e:
+                            logger.error(f"Error sending group message: {e}", exc_info=True)
+                            continue
+                    logger.info("message sent to group")
             elif action == "group_subscribe":
                 group_name = data.get("group")
                 if group_name in group_subscribers:
