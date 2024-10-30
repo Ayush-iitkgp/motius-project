@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.StreamHandler(sys.stdout)],  # Log to stdout
+    handlers=[logging.StreamHandler(sys.stdout)],
 )
 
 connected_users: Dict[str, WebSocket] = {}
@@ -45,22 +45,22 @@ async def websocket_endpoint(websocket: WebSocket, username: str = Query(...)) -
             elif action == "group_message":
                 group_name = data.get("to")
                 message = data.get("msg")
-                logger.warn(f"Group message received by server: {message}")
-                logger.warn(f"group subscrbiber are{group_subscribers}")
+                logger.info(f"Group message received by server: {message}")
+                logger.info(f"group subscrbiber are{group_subscribers}")
                 if group_name in group_subscribers:
                     for subscriber in group_subscribers[group_name]:
                         logger.info(f"Subscriber: {subscriber}")
                         await subscriber.send_json(
                             {"action": "group_message", "to": group_name, "from": username, "msg": message}
                         )
-                        logger.warn("message sent to group")
+                        logger.info("message sent to group")
             elif action == "group_subscribe":
                 group_name = data.get("group")
                 if group_name in group_subscribers:
                     group_subscribers[group_name].append(websocket)
                 else:
                     group_subscribers[group_name] = [websocket]
-                logger.warn(f"Group subscriber action result: {group_name}")
+                logger.info(f"Group subscriber action result: {group_name}")
 
     except WebSocketDisconnect:
         logger.info(f"Disconnected user: {username}")
