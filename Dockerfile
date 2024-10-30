@@ -10,7 +10,6 @@ RUN pip install --upgrade pip && \
     poetry install
 
 COPY src src
-COPY scripts scripts
 COPY tests tests
 
 ENV PYTHONPATH /opt/motius-project
